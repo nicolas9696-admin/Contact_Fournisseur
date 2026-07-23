@@ -154,13 +154,14 @@ function cardHtml(r) {
   ].filter(Boolean).join("");
 
   const sub = [r.contact_nom, r.fonction].filter(Boolean).join(" · ");
-  const tags = (r.mots_cles || []).map(t =>
+  const cat = r.categorie
+    ? `<button class="tag tag-cat" data-cardcat="${esc(r.categorie)}">${hl(r.categorie)}</button>` : "";
+  const tags = cat + (r.mots_cles || []).map(t =>
     `<button class="tag" data-tag="${esc(t)}">${hl(t)}</button>`).join("");
 
   return `<article class="card">
     <div class="card-head">
       <div class="card-title">${hl(r.entreprise)}${sub ? `<div class="card-sub">${hl(sub)}</div>` : ""}</div>
-      ${r.categorie ? `<span class="card-cat">${hl(r.categorie)}</span>` : ""}
       <button class="card-edit" data-edit="${esc(r.id)}" title="Modifier">✏️</button>
     </div>
     ${lines ? `<div class="card-lines">${lines}</div>` : ""}
@@ -358,7 +359,9 @@ grid.addEventListener("click", e => {
   const edit = e.target.closest("[data-edit]");
   if (edit) return openForm(state.rows.find(r => String(r.id) === edit.dataset.edit));
   const tag = e.target.closest("[data-tag]");
-  if (tag) { toggle(state.tags, tag.dataset.tag); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  if (tag) { toggle(state.tags, tag.dataset.tag); render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  const cat = e.target.closest("[data-cardcat]");
+  if (cat) { toggle(state.cats, cat.dataset.cardcat); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
 });
 
 $("#btnNew").addEventListener("click", () => openForm(null));
