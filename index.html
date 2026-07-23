@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contacts Fournisseurs</title>
+<meta name="description" content="Répertoire dynamique des contacts fournisseurs">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📇</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">📇</span>
+      <div>
+        <h1>Contacts Fournisseurs</h1>
+        <p class="brand-sub" id="countLabel">—</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" id="btnImport" title="Importer un CSV">Importer</button>
+      <button class="btn btn-ghost" id="btnExport" title="Exporter en CSV">Exporter</button>
+      <button class="btn btn-primary" id="btnNew">+ Fournisseur</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="searchbar">
+    <div class="search-field">
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><path d="M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+      <input type="search" id="search" placeholder="Rechercher : entreprise, contact, mot-clé, ville, téléphone…" autocomplete="off">
+      <button class="clear-btn" id="clearSearch" hidden aria-label="Effacer">×</button>
+    </div>
+    <select id="sortSelect" class="select">
+      <option value="entreprise">Trier : A → Z</option>
+      <option value="-entreprise">Trier : Z → A</option>
+      <option value="-date_rencontre">Rencontre : récent</option>
+      <option value="-created_at">Ajout : récent</option>
+    </select>
+  </section>
+
+  <section class="filters" id="filters" hidden>
+    <div class="filter-group">
+      <span class="filter-label">Catégories</span>
+      <div class="chips" id="catChips"></div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Mots-clés</span>
+      <div class="chips" id="tagChips"></div>
+    </div>
+  </section>
+
+  <section id="stateBox" class="state"></section>
+
+  <section class="grid" id="grid"></section>
+
+</main>
+
+<!-- ── Modale fiche fournisseur ── -->
+<dialog id="dlgForm" class="dialog">
+  <form method="dialog" id="form" class="form">
+    <header class="dialog-head">
+      <h2 id="formTitle">Nouveau fournisseur</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer">×</button>
+    </header>
+
+    <div class="form-body">
+      <div class="field span2">
+        <label for="f_entreprise">Entreprise <span class="req">*</span></label>
+        <input id="f_entreprise" name="entreprise" required maxlength="160" placeholder="Ex. Menuiserie Dupont">
+      </div>
+
+      <div class="field">
+        <label for="f_contact_nom">Contact</label>
+        <input id="f_contact_nom" name="contact_nom" maxlength="120" placeholder="Prénom Nom">
+      </div>
+      <div class="field">
+        <label for="f_fonction">Fonction</label>
+        <input id="f_fonction" name="fonction" maxlength="120" placeholder="Commercial, gérant…">
+      </div>
+
+      <div class="field">
+        <label for="f_telephone">Téléphone</label>
+        <input id="f_telephone" name="telephone" type="tel" maxlength="40" placeholder="06 12 34 56 78">
+      </div>
+      <div class="field">
+        <label for="f_email">Email</label>
+        <input id="f_email" name="email" type="email" maxlength="160" placeholder="contact@exemple.fr">
+      </div>
+
+      <div class="field span2">
+        <label for="f_site_web">Site web</label>
+        <input id="f_site_web" name="site_web" maxlength="200" placeholder="exemple.fr">
+      </div>
+
+      <div class="field">
+        <label for="f_adresse">Adresse</label>
+        <input id="f_adresse" name="adresse" maxlength="200" placeholder="12 rue des Artisans">
+      </div>
+      <div class="field">
+        <label for="f_ville">Ville</label>
+        <input id="f_ville" name="ville" maxlength="120" placeholder="Lyon" list="listVilles">
+        <datalist id="listVilles"></datalist>
+      </div>
+
+      <div class="field">
+        <label for="f_categorie">Catégorie</label>
+        <input id="f_categorie" name="categorie" maxlength="80" placeholder="Matériaux, transport…" list="listCategories">
+        <datalist id="listCategories"></datalist>
+      </div>
+      <div class="field">
+        <label for="f_date_rencontre">Date de rencontre</label>
+        <input id="f_date_rencontre" name="date_rencontre" type="date">
+      </div>
+
+      <div class="field span2">
+        <label for="f_mots_cles">Mots-clés <span class="hint">séparés par des virgules</span></label>
+        <input id="f_mots_cles" name="mots_cles" placeholder="bois, sur-mesure, livraison rapide">
+        <div class="chips chips-suggest" id="tagSuggest"></div>
+      </div>
+
+      <div class="field span2">
+        <label for="f_notes">Notes</label>
+        <textarea id="f_notes" name="notes" rows="4" placeholder="Contexte de la rencontre, tarifs, délais, remarques…"></textarea>
+      </div>
+    </div>
+
+    <footer class="dialog-foot">
+      <button type="button" class="btn btn-danger-ghost" id="btnDelete" hidden>Supprimer</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost" data-close>Annuler</button>
+      <button type="submit" class="btn btn-primary" id="btnSave">Enregistrer</button>
+    </footer>
+  </form>
+</dialog>
+
+<input type="file" id="fileCsv" accept=".csv,text/csv" hidden>
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
