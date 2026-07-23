@@ -11,6 +11,6 @@
 ──────────────────────────────────────────────────────────────── */
 
 window.APP_CONFIG = {
-  SUPABASE_URL: "",       // ex. "https://xxxxxxxxxxxx.supabase.co"
-  SUPABASE_ANON_KEY: "",  // ex. "eyJhbGciOi..."
+  SUPABASE_URL: "https://dnlnfxuemudpjikkeunz.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_UfPSVHFJgrJOhkGuSTxq9Q_3kl9WBsD",
 };
