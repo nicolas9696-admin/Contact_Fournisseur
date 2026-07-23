@@ -58,10 +58,13 @@ git push
 
 ## Sécurité — à lire
 
-Sur GitHub Pages, l'URL du site est publique et le code (donc la clé *anon*) est lisible
-par tous. Avec l'option A du `schema.sql`, **n'importe qui pourrait lire et modifier tes
-fiches fournisseurs**. Applique l'**option B** (accès réservé aux utilisateurs connectés)
-avant de publier — dis-le moi et j'ajoute l'écran de connexion au site.
+**Choix retenu : accès ouvert (option A du `schema.sql`).** Le site est sur GitHub Pages,
+son URL et sa clé publishable sont publiques : toute personne connaissant l'adresse peut
+lire et modifier les fiches. C'est assumé — la protection repose sur le fait que l'URL
+n'est pas diffusée.
+
+Pour verrouiller plus tard : appliquer l'option B du `schema.sql` (accès réservé aux
+utilisateurs connectés) et ajouter un écran de connexion au site.
 
 Le fichier `.gitignore` exclut déjà `a-importer.csv` et les photos : les coordonnées
 de tes contacts ne partent pas sur GitHub.
