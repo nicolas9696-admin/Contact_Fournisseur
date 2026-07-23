@@ -1,0 +1,13 @@
+# Données personnelles — ne jamais publier sur GitHub
+a-importer.csv
+*-a-importer.csv
+fournisseurs-*.csv
+*.heic
+*.jpg
+*.jpeg
+*.png
+
+# Système
+desktop.ini
+Thumbs.db
+.DS_Store
