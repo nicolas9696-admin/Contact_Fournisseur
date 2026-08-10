@@ -10,7 +10,12 @@
     "adresse": "Route de l'Industrie 19",
     "ville": "1564 Domdidier (CH)",
     "categorie": "Électrotechnique",
-    "mots_cles": ["building", "bâtiment", "technique commerciale", "suisse"],
+    "mots_cles": [
+      "building",
+      "bâtiment",
+      "technique commerciale",
+      "suisse"
+    ],
     "notes": "Building / Bâtiment — technique commerciale",
     "date_rencontre": "2026-07-23",
     "created_at": "2026-08-10T00:00:00.000Z",
@@ -27,7 +32,11 @@
     "adresse": "Route de l'Industrie 19",
     "ville": "1564 Domdidier (CH)",
     "categorie": "Électrotechnique",
-    "mots_cles": ["énergie", "concept technique", "suisse"],
+    "mots_cles": [
+      "énergie",
+      "concept technique",
+      "suisse"
+    ],
     "notes": "Énergie -> concept technique",
     "date_rencontre": "2026-07-23",
     "created_at": "2026-08-10T00:00:00.000Z",
@@ -44,7 +53,14 @@
     "adresse": "Hagenholzstrasse 83 B",
     "ville": "8050 Zürich (CH)",
     "categorie": "Domotique / Automation bâtiment",
-    "mots_cles": ["domotique", "automation bâtiment", "sensing", "smart living", "niko", "suisse"],
+    "mots_cles": [
+      "domotique",
+      "automation bâtiment",
+      "sensing",
+      "smart living",
+      "niko",
+      "suisse"
+    ],
     "notes": "Division du groupe Niko.\nWygwam est spécialisé dans l'automation du bâtiment, les capteurs et le smart living ; Niko poursuit son activité historique dans les solutions électriques.\nSource : signature e-mail.",
     "date_rencontre": null,
     "created_at": "2026-08-10T00:00:00.000Z",
@@ -61,7 +77,13 @@
     "adresse": "Chemin de Mongevon 25, 2ème étage nord",
     "ville": "1023 Crissier (CH)",
     "categorie": "Électrotechnique",
-    "mots_cles": ["énergie", "power systems", "energy management", "distribution électrique", "suisse"],
+    "mots_cles": [
+      "énergie",
+      "power systems",
+      "energy management",
+      "distribution électrique",
+      "suisse"
+    ],
     "notes": "Energy Management Business.\nJoignable aussi sur MS Teams : antoine.claverie@se.com\nSource : signature e-mail.",
     "date_rencontre": null,
     "created_at": "2026-08-10T00:00:00.000Z",
@@ -78,7 +100,12 @@
     "adresse": "Chemin de Mongevon 25",
     "ville": "1023 Crissier (CH)",
     "categorie": "Électrotechnique",
-    "mots_cles": ["home solutions", "résidentiel", "conseil clientèle", "suisse"],
+    "mots_cles": [
+      "home solutions",
+      "résidentiel",
+      "conseil clientèle",
+      "suisse"
+    ],
     "notes": "Europe Operations.\nLigne directe : +41 31 547 80 71\nSource : signature e-mail.",
     "date_rencontre": null,
     "created_at": "2026-08-10T00:00:00.000Z",
@@ -95,10 +122,33 @@
     "adresse": "Bergstrasse 70",
     "ville": "8810 Horgen (CH)",
     "categorie": "Électrotechnique",
-    "mots_cles": ["feller", "marketing", "expositions", "schneider electric", "suisse"],
+    "mots_cles": [
+      "feller",
+      "marketing",
+      "expositions",
+      "schneider electric",
+      "suisse"
+    ],
     "notes": "Feller by Schneider Electric.\nSource : signature e-mail.",
     "date_rencontre": null,
     "created_at": "2026-08-10T00:00:00.000Z",
     "updated_at": "2026-08-10T00:00:00.000Z"
+  },
+  {
+    "entreprise": "Test",
+    "contact_nom": null,
+    "fonction": null,
+    "telephone": null,
+    "email": null,
+    "site_web": null,
+    "adresse": null,
+    "ville": null,
+    "categorie": null,
+    "mots_cles": [],
+    "notes": null,
+    "date_rencontre": null,
+    "id": "loc-r7nnc6mgmsnao6ln",
+    "created_at": "2026-08-10T13:56:02.027Z",
+    "updated_at": "2026-08-10T13:56:02.027Z"
   }
 ]
