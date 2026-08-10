@@ -4,7 +4,11 @@ Répertoire dynamique des fournisseurs rencontrés : fiche complète, recherche 
 multi-mots (entreprise, contact, mot-clé, ville, téléphone…), filtres par catégorie et
 mots-clés, import/export CSV.
 
-Site statique (HTML/CSS/JS, aucun build) + base Supabase.
+Site statique (HTML/CSS/JS, aucun build) hébergé sur **GitHub Pages**. Les fiches sont
+stockées dans le fichier `fournisseurs.json` du dépôt — pas de serveur, rien qui se met
+en pause.
+
+**Site en ligne :** <https://nicolas9696-admin.github.io/Contact_Fournisseur/>
 
 ## Fichiers
 
@@ -12,65 +16,52 @@ Site statique (HTML/CSS/JS, aucun build) + base Supabase.
 |---|---|
 | `index.html` | Structure de la page |
 | `styles.css` | Mise en forme (clair/sombre automatique, mobile) |
-| `app.js` | Logique : recherche, filtres, CRUD, CSV |
-| `config.js` | **Tes clés Supabase** (à remplir) |
-| `schema.sql` | Table à créer dans Supabase |
+| `app.js` | Logique : recherche, filtres, CRUD, CSV, connexion GitHub |
+| `config.js` | Nom du dépôt qui sert de base (aucune clé secrète) |
+| `fournisseurs.json` | **La base de données** : une entrée par fournisseur |
+| `schema.sql` | Ancien schéma Supabase — conservé pour mémoire, plus utilisé |
 
-## Essayer tout de suite (mode local)
+## Comment ça marche
 
-Ouvre `index.html` dans un navigateur. Sans clés Supabase, les données sont stockées
-dans le navigateur — pratique pour tester l'interface, mais liées à cet appareil.
+- **Lecture** : le site lit `fournisseurs.json` via l'API GitHub. Public, aucune clé
+  nécessaire — le répertoire s'affiche pour quiconque ouvre l'URL.
+- **Écriture** (ajout / modification / suppression / import) : nécessite une clé
+  personnelle GitHub, collée une fois par appareil via le bouton **Connexion**. Chaque
+  enregistrement crée un commit dans le dépôt. La clé reste dans le navigateur
+  (`localStorage`) et n'est **jamais** publiée dans le dépôt.
 
-## Mise en ligne (5–10 min)
+## Modifier depuis un appareil (obtenir la clé)
 
-### 1. Base de données
-1. Crée un compte gratuit sur <https://supabase.com> puis un nouveau projet.
-2. Onglet **SQL Editor** → colle le contenu de `schema.sql` → **Run**.
-3. **Project Settings → API** : copie *Project URL* et la clé *anon public*.
-4. Colle les deux valeurs dans `config.js`.
+À faire une seule fois par appareil (PC, téléphone…). Le site te guide aussi via le
+bouton **Connexion**.
 
-### 2. Hébergement — GitHub Pages
+1. Ouvre <https://github.com/settings/personal-access-tokens/new> (connecte-toi si besoin).
+2. *Token name* : par ex. `Contacts Fournisseurs`.
+3. *Expiration* : **No expiration** (pour ne jamais être coupé).
+4. *Repository access* → **Only select repositories** → coche `Contact_Fournisseur`.
+5. *Permissions* → *Repository permissions* → **Contents** → **Read and write**.
+6. **Generate token**, copie la clé (`github_pat_…`), puis colle-la dans le site via
+   **Connexion → Se connecter**.
 
-Le dépôt Git est déjà initialisé et le premier commit est fait.
+La clé donne uniquement le droit d'écrire dans ce dépôt. En cas de perte du téléphone,
+tu peux la révoquer depuis les réglages GitHub sans rien casser d'autre.
 
-1. Crée un dépôt vide sur <https://github.com/new> — nom `contact-fournisseur`,
-   **sans** README ni .gitignore (le dossier en contient déjà).
-   Le dépôt doit être **public** : GitHub Pages sur dépôt privé demande un compte payant.
-2. Relie et envoie :
-   ```bash
-   git remote add origin https://github.com/<ton-pseudo>/contact-fournisseur.git
-   git push -u origin main
-   ```
-3. Dépôt → **Settings → Pages** → *Source* : `Deploy from a branch`,
-   *Branch* : `main` / `/ (root)` → **Save**.
-4. Au bout d'une minute, le site est en ligne sur
-   `https://<ton-pseudo>.github.io/contact-fournisseur/`
+## Sécurité
 
-Mises à jour suivantes :
-```bash
-git add -A
-git commit -m "Mise à jour"
-git push
-```
+Le dépôt est public : **le contenu de `fournisseurs.json` est lisible par toute personne
+qui trouve le dépôt ou l'URL du site**. C'est le choix assumé (accès ouvert en lecture).
+Seule la modification est protégée par la clé.
 
-> Le dépôt étant public, `config.js` (donc ta clé Supabase *anon*) y sera visible.
-> C'est prévu par Supabase — mais lis la section Sécurité ci-dessous avant de publier.
+Pour rendre les données privées il faudrait un dépôt privé (GitHub Pages privé = compte
+payant) ou un autre hébergement. À demander si besoin.
 
-## Sécurité — à lire
+Le `.gitignore` exclut `a-importer.csv`, les exports CSV et les photos : ces fichiers de
+travail ne partent pas sur GitHub.
 
-**Choix retenu : accès ouvert (option A du `schema.sql`).** Le site est sur GitHub Pages,
-son URL et sa clé publishable sont publiques : toute personne connaissant l'adresse peut
-lire et modifier les fiches. C'est assumé — la protection repose sur le fait que l'URL
-n'est pas diffusée.
+## Développer / tester en local
 
-Pour verrouiller plus tard : appliquer l'option B du `schema.sql` (accès réservé aux
-utilisateurs connectés) et ajouter un écran de connexion au site.
-
-Le fichier `.gitignore` exclut déjà `a-importer.csv` et les photos : les coordonnées
-de tes contacts ne partent pas sur GitHub.
-
-La clé *anon* est faite pour être publique : c'est la politique RLS ci-dessus qui protège
-réellement les données, pas la clé.
+Ouvre `index.html` dans un navigateur. Pour tester sans toucher à la base GitHub, mets
+`BACKEND: "local"` dans `config.js` : les fiches sont alors stockées dans le navigateur.
 
 ## Import CSV
 
@@ -82,4 +73,4 @@ Colonnes reconnues (insensibles aux accents/majuscules) :
 ## Raccourcis
 
 - `Ctrl+K` ou `/` : aller à la recherche
-- Clic sur un mot-clé d'une fiche : filtrer dessus
+- Clic sur un mot-clé ou une catégorie d'une fiche : filtrer dessus
