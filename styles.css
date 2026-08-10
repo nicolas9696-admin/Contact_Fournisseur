@@ -204,6 +204,26 @@ mark{background:rgba(255,214,0,.4);color:inherit;border-radius:3px;padding:0 1px
 }
 .spacer{flex:1}
 
+/* ── Fenêtre connexion ── */
+.dialog-narrow{max-width:480px}
+.token-body{padding:18px;display:flex;flex-direction:column;gap:12px;max-height:min(70vh,620px);overflow:auto}
+.token-intro{margin:0;font-size:14px;color:var(--muted);line-height:1.5}
+.token-alert{
+  margin:0;font-size:13.5px;background:var(--accent-soft);color:var(--accent);
+  padding:10px 12px;border-radius:10px;font-weight:500;
+}
+.token-label{font-size:12.5px;font-weight:600;color:var(--muted);margin-top:2px}
+.token-input{
+  font:inherit;font-size:14px;color:var(--text);background:var(--bg);
+  border:1px solid var(--border);border-radius:10px;padding:11px 12px;outline:none;
+}
+.token-input:focus{border-color:var(--accent);background:var(--surface)}
+.token-help{font-size:13.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:2px 12px}
+.token-help summary{cursor:pointer;padding:10px 0;font-weight:550;color:var(--text)}
+.token-help ol{margin:0 0 12px;padding-left:20px;display:flex;flex-direction:column;gap:7px;line-height:1.45}
+.token-help a{color:var(--accent)}
+.token-help code{background:var(--surface);padding:1px 5px;border-radius:5px;font-size:12.5px}
+
 /* ── Toast ────────────────────────────── */
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);

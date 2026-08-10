@@ -21,6 +21,7 @@
       </div>
     </div>
     <div class="topbar-actions">
+      <button class="btn btn-ghost" id="btnConn" hidden title="Se connecter pour modifier">🔒 Connexion</button>
       <button class="btn btn-ghost" id="btnImport" title="Importer un CSV">Importer</button>
       <button class="btn btn-ghost" id="btnExport" title="Exporter en CSV">Exporter</button>
       <button class="btn btn-primary" id="btnNew">+ Fournisseur</button>
@@ -139,10 +140,50 @@
   </form>
 </dialog>
 
+<!-- ── Fenêtre : connexion GitHub ── -->
+<dialog id="dlgToken" class="dialog dialog-narrow">
+  <div class="form">
+    <header class="dialog-head">
+      <h2>Connexion pour modifier</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer">×</button>
+    </header>
+    <div class="token-body">
+      <p id="tokenHint" class="token-alert" hidden>
+        🔒 Il faut être connecté pour modifier les fiches. Colle ta clé ci-dessous.
+      </p>
+      <p class="token-intro">
+        La <strong>lecture</strong> du répertoire est libre. Pour <strong>ajouter, modifier
+        ou importer</strong>, colle une clé personnelle GitHub. Elle reste dans ce navigateur
+        et n'est jamais publiée.
+      </p>
+      <label for="tokenInput" class="token-label">Clé GitHub (token)</label>
+      <input id="tokenInput" type="password" class="token-input" autocomplete="off"
+             placeholder="github_pat_… ou ghp_…" spellcheck="false">
+
+      <details class="token-help">
+        <summary>Comment obtenir la clé ? (une fois par appareil)</summary>
+        <ol>
+          <li>Ouvre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → nouveau token</a> (connecte-toi si besoin).</li>
+          <li><em>Token name</em> : par ex. <code>Contacts Fournisseurs</code>.</li>
+          <li><em>Expiration</em> : choisis <strong>No expiration</strong> pour ne jamais être coupé.</li>
+          <li><em>Repository access</em> → <strong>Only select repositories</strong> → coche <code>Contact_Fournisseur</code>.</li>
+          <li><em>Permissions</em> → <em>Repository permissions</em> → <strong>Contents</strong> → <strong>Read and write</strong>.</li>
+          <li><strong>Generate token</strong>, copie la clé affichée et colle-la ci-dessus.</li>
+        </ol>
+      </details>
+    </div>
+    <footer class="dialog-foot">
+      <button type="button" class="btn btn-danger-ghost" id="btnTokenRemove" hidden>Se déconnecter</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost" data-close>Fermer</button>
+      <button type="button" class="btn btn-primary" id="btnTokenSave">Se connecter</button>
+    </footer>
+  </div>
+</dialog>
+
 <input type="file" id="fileCsv" accept=".csv,text/csv" hidden>
 <div id="toast" class="toast" hidden></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>

@@ -2,52 +2,133 @@
 (() => {
 "use strict";
 
-const TABLE = "fournisseurs";
 const LS_KEY = "contact_fournisseur_v1";
+const TOKEN_KEY = "cf_github_token";
 const FIELDS = ["entreprise","contact_nom","fonction","telephone","email","site_web",
                 "adresse","ville","categorie","mots_cles","notes","date_rencontre"];
 
-/* ── Couche de données : Supabase, ou navigateur si non configuré ── */
+/* ── Choix du backend ── */
 const cfg = window.APP_CONFIG || {};
-const useSupabase = Boolean(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY);
-const sb = useSupabase ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY) : null;
+const backend = cfg.BACKEND || "local";
+const useGithub = backend === "github" && cfg.GITHUB && cfg.GITHUB.owner;
+const GH = cfg.GITHUB || {};
+
+/* ── Gestion de la clé GitHub (stockée dans le navigateur) ── */
+function ghToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
+function setGhToken(t) { t ? localStorage.setItem(TOKEN_KEY, t.trim()) : localStorage.removeItem(TOKEN_KEY); }
+function ghUrl() { return `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}`; }
+
+/* Encodage base64 compatible UTF-8 (accents) */
+function utf8ToB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+function b64ToUtf8(b64) {
+  const bin = atob((b64 || "").replace(/\s/g, ""));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+async function ghErrorMessage(res) {
+  let detail = "";
+  try { const j = await res.json(); detail = j.message || ""; } catch {}
+  if (res.status === 401) return "Clé GitHub invalide ou expirée. Reconnecte-toi.";
+  if (res.status === 403) return "Accès refusé : la clé n'a pas le droit d'écriture, ou quota GitHub atteint.";
+  if (res.status === 404) return "Fichier ou dépôt introuvable. Vérifie config.js.";
+  if (res.status === 409) return "CONFLICT";
+  return detail || ("Erreur GitHub (HTTP " + res.status + ")");
+}
+
+let ghSha = null;
+
+async function ghRead() {
+  const headers = { "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
+  const t = ghToken();
+  if (t) headers.Authorization = "Bearer " + t;
+  const url = ghUrl() + "?ref=" + encodeURIComponent(GH.branch || "main") + "&t=" + Date.now();
+  const res = await fetch(url, { headers, cache: "no-store" });
+  if (res.status === 404) { ghSha = null; return []; }
+  if (!res.ok) throw new Error(await ghErrorMessage(res));
+  const data = await res.json();
+  ghSha = data.sha;
+  const rows = JSON.parse(b64ToUtf8(data.content) || "[]");
+  return Array.isArray(rows) ? rows : [];
+}
+
+async function ghPut(rows, message) {
+  const t = ghToken();
+  if (!t) { const e = new Error("Connecte-toi pour modifier."); e.code = "NO_TOKEN"; throw e; }
+  const body = {
+    message: message || "Mise à jour des fournisseurs",
+    content: utf8ToB64(JSON.stringify(rows, null, 2) + "\n"),
+    branch: GH.branch || "main",
+  };
+  if (ghSha) body.sha = ghSha;
+  const res = await fetch(ghUrl(), {
+    method: "PUT",
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + t,
+      "Content-Type": "application/json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const msg = await ghErrorMessage(res);
+    const e = new Error(msg === "CONFLICT" ? "Conflit de version" : msg);
+    if (msg === "CONFLICT") e.code = "CONFLICT";
+    throw e;
+  }
+  const data = await res.json();
+  ghSha = data.content && data.content.sha;
+}
+
+/* Lit l'état frais, applique une transformation, réécrit — avec 1 réessai sur conflit */
+async function ghMutate(mutator, message) {
+  if (!ghToken()) { const e = new Error("Connecte-toi pour modifier."); e.code = "NO_TOKEN"; throw e; }
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const rows = await ghRead();
+    const next = mutator(rows.slice());
+    try {
+      await ghPut(next, message);
+      return next;
+    } catch (e) {
+      if (e.code === "CONFLICT" && attempt === 0) continue;
+      throw e;
+    }
+  }
+}
 
 const store = {
   async list() {
-    if (!useSupabase) return readLocal();
-    const { data, error } = await sb.from(TABLE).select("*");
-    if (error) throw error;
-    return data;
+    if (useGithub) return ghRead();
+    return readLocal();
   },
   async save(rec) {
-    if (!useSupabase) {
-      const all = readLocal();
+    const mutate = rows => {
       if (rec.id) {
-        const i = all.findIndex(r => r.id === rec.id);
-        if (i >= 0) all[i] = { ...all[i], ...rec, updated_at: nowIso() };
-      } else {
-        all.push({ ...rec, id: uid(), created_at: nowIso(), updated_at: nowIso() });
+        const i = rows.findIndex(r => r.id === rec.id);
+        if (i >= 0) { rows[i] = { ...rows[i], ...rec, updated_at: nowIso() }; return rows; }
       }
-      writeLocal(all);
-      return;
-    }
-    const payload = { ...rec, updated_at: nowIso() };
-    if (!payload.id) delete payload.id;
-    const { error } = await sb.from(TABLE).upsert(payload);
-    if (error) throw error;
+      rows.push({ ...rec, id: rec.id || uid(), created_at: nowIso(), updated_at: nowIso() });
+      return rows;
+    };
+    if (useGithub) return void await ghMutate(mutate, rec.id ? `Modif : ${rec.entreprise}` : `Ajout : ${rec.entreprise}`);
+    writeLocal(mutate(readLocal()));
   },
   async remove(id) {
-    if (!useSupabase) return writeLocal(readLocal().filter(r => r.id !== id));
-    const { error } = await sb.from(TABLE).delete().eq("id", id);
-    if (error) throw error;
+    const mutate = rows => rows.filter(r => r.id !== id);
+    if (useGithub) return void await ghMutate(mutate, "Suppression d'un fournisseur");
+    writeLocal(mutate(readLocal()));
   },
   async saveMany(recs) {
-    if (!useSupabase) {
-      writeLocal(readLocal().concat(recs.map(r => ({ ...r, id: uid(), created_at: nowIso() }))));
-      return;
-    }
-    const { error } = await sb.from(TABLE).insert(recs);
-    if (error) throw error;
+    const stamped = recs.map(r => ({ ...r, id: uid(), created_at: nowIso(), updated_at: nowIso() }));
+    const mutate = rows => rows.concat(stamped);
+    if (useGithub) return void await ghMutate(mutate, `Import de ${recs.length} fournisseur(s)`);
+    writeLocal(mutate(readLocal()));
   },
 };
 
@@ -328,10 +409,16 @@ async function refresh() {
   } catch (e) {
     grid.innerHTML = "";
     stateBox.className = "state error";
-    stateBox.innerHTML = `<h2>Connexion à la base impossible</h2>
+    stateBox.innerHTML = `<h2>Chargement impossible</h2>
       <p>${esc(e.message || e)}</p>
-      <p style="margin-top:8px">Vérifie <code>config.js</code> et que la table <code>fournisseurs</code> existe (voir <code>schema.sql</code>).</p>`;
+      <p style="margin-top:8px">Vérifie ta connexion internet et le fichier <code>config.js</code>.</p>`;
   }
+}
+
+/* Ouvre la fenêtre de connexion si l'erreur est un manque de clé. Renvoie true si géré. */
+function handleTokenError(err) {
+  if (err && err.code === "NO_TOKEN") { openTokenDialog(true); return true; }
+  return false;
 }
 
 /* ── Événements ── */
@@ -386,7 +473,7 @@ form.addEventListener("submit", async e => {
     await refresh();
     toast(editingId ? "Fournisseur mis à jour" : "Fournisseur ajouté");
   } catch (err) {
-    toast("Erreur : " + (err.message || err), true);
+    if (!handleTokenError(err)) toast("Erreur : " + (err.message || err), true);
   } finally {
     btn.disabled = false;
   }
@@ -400,7 +487,7 @@ $("#btnDelete").addEventListener("click", async () => {
     dlg.close();
     await refresh();
     toast("Fournisseur supprimé");
-  } catch (err) { toast("Erreur : " + (err.message || err), true); }
+  } catch (err) { if (!handleTokenError(err)) toast("Erreur : " + (err.message || err), true); }
 });
 
 $("#btnExport").addEventListener("click", () => {
@@ -425,7 +512,7 @@ $("#fileCsv").addEventListener("change", async e => {
     await store.saveMany(recs);
     await refresh();
     toast(`${recs.length} fournisseur(s) importé(s)`);
-  } catch (err) { toast("Import impossible : " + (err.message || err), true); }
+  } catch (err) { if (!handleTokenError(err)) toast("Import impossible : " + (err.message || err), true); }
 });
 
 document.addEventListener("keydown", e => {
@@ -433,10 +520,66 @@ document.addEventListener("keydown", e => {
   if (e.key === "/" && document.activeElement === document.body) { e.preventDefault(); $("#search").focus(); }
 });
 
-/* ── Démarrage ── */
-if (!useSupabase) {
-  toast("Mode local : renseigne config.js pour synchroniser en ligne");
+/* ── Connexion GitHub ── */
+const dlgToken = $("#dlgToken");
+
+function updateConnUI() {
+  const btn = $("#btnConn");
+  if (!btn) return;
+  if (!useGithub) { btn.hidden = true; return; }
+  const on = Boolean(ghToken());
+  btn.hidden = false;
+  btn.textContent = on ? "🔓 Connecté" : "🔒 Connexion";
+  btn.classList.toggle("btn-primary", !on);
+  btn.classList.toggle("btn-ghost", on);
 }
+
+function openTokenDialog(fromDenied) {
+  if (!dlgToken) return;
+  $("#tokenInput").value = ghToken();
+  $("#tokenHint").hidden = !fromDenied;
+  $("#btnTokenRemove").hidden = !ghToken();
+  dlgToken.showModal();
+  setTimeout(() => $("#tokenInput").focus(), 30);
+}
+
+if (dlgToken) {
+  $("#btnConn").addEventListener("click", () => openTokenDialog(false));
+  dlgToken.addEventListener("click", e => { if (e.target.closest("[data-close]")) dlgToken.close(); });
+
+  $("#btnTokenSave").addEventListener("click", async () => {
+    const t = $("#tokenInput").value.trim();
+    if (!t) return toast("Colle ta clé GitHub d'abord", true);
+    const btn = $("#btnTokenSave");
+    btn.disabled = true;
+    const prev = ghToken();
+    setGhToken(t);
+    try {
+      await ghRead();                       // valide la clé par une vraie requête
+      dlgToken.close();
+      updateConnUI();
+      toast("Connecté — tu peux modifier les fiches");
+    } catch (err) {
+      setGhToken(prev);                     // on annule si la clé est refusée
+      toast(err.message || "Clé refusée", true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  $("#btnTokenRemove").addEventListener("click", () => {
+    setGhToken("");
+    updateConnUI();
+    dlgToken.close();
+    toast("Déconnecté (lecture seule)");
+  });
+}
+
+/* ── Démarrage ── */
+if (backend === "local") {
+  toast("Mode local : les fiches restent sur cet appareil");
+}
+updateConnUI();
 refresh();
 
 })();
