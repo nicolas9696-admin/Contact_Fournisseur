@@ -133,5 +133,23 @@
     "date_rencontre": null,
     "created_at": "2026-08-10T00:00:00.000Z",
     "updated_at": "2026-08-10T00:00:00.000Z"
+  },
+  {
+    "entreprise": "Commune du Chenit",
+    "contact_nom": "Nicolas Penel",
+    "fonction": "Agent d'exploitation",
+    "telephone": "+41 78 634 24 95",
+    "ville": "Le Chenit (VD, CH)",
+    "categorie": "Collectivité publique",
+    "mots_cles": [
+      "commune",
+      "exploitation",
+      "voirie",
+      "vallée de joux",
+      "suisse"
+    ],
+    "id": "loc-lu5w4qiwmsop70q8",
+    "created_at": "2026-08-11T13:30:21.680Z",
+    "updated_at": "2026-08-11T13:30:21.680Z"
   }
 ]
