@@ -156,5 +156,24 @@
     "adresse": null,
     "notes": "Ouverture du temple du Brassus",
     "date_rencontre": null
+  },
+  {
+    "entreprise": "Siemens Schweiz AG",
+    "contact_nom": "Alain Bonny",
+    "telephone": "+41 79 502 61 95",
+    "email": "alain.bonny@siemens.com",
+    "site_web": "www.siemens.ch",
+    "adresse": "Avenue des Baumettes 5",
+    "ville": "1020 Renens (VD, CH)",
+    "categorie": "Électrotechnique",
+    "mots_cles": [
+      "siemens",
+      "romandie",
+      "suisse"
+    ],
+    "notes": "Service / unité : RC-CH SI EA ROM LV.\nAutre site : www.siemens.com\nNom déduit de l'adresse e-mail (non imprimé sur la signature).",
+    "id": "loc-gw3w3vpjmssrdlg6",
+    "created_at": "2026-08-14T09:42:32.406Z",
+    "updated_at": "2026-08-14T09:42:32.407Z"
   }
 ]
