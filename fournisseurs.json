@@ -175,5 +175,28 @@
     "id": "loc-gw3w3vpjmssrdlg6",
     "created_at": "2026-08-14T09:42:32.406Z",
     "updated_at": "2026-08-14T09:42:32.407Z"
+  },
+  {
+    "entreprise": "Cottens & Badoux Energie Services SA (CESSA)",
+    "contact_nom": "Aurélie Daucourt",
+    "fonction": "Ingénieure électricienne",
+    "telephone": "+41 78 656 87 94",
+    "email": "aurelie.daucourt@cessa.ch",
+    "site_web": "www.cessa.ch",
+    "ville": "Suisse (romande)",
+    "categorie": "Énergie électrique",
+    "mots_cles": [
+      "cessa",
+      "haute tension",
+      "postes HT",
+      "contrôle-commande",
+      "réseaux HT/MT",
+      "ingénierie",
+      "suisse"
+    ],
+    "notes": "CESSA : services dans l'énergie électrique (réseaux transport/distribution HT/MT, industrie, transport de personnes).\nParcours : Viteos (ingénieure projets contrôle-commande & protection, 4 ans) puis responsable des postes HT chez Romande Energie ; chez CESSA depuis septembre 2018.",
+    "id": "loc-kbpqklyumsswb9ry",
+    "created_at": "2026-08-14T12:00:42.047Z",
+    "updated_at": "2026-08-14T12:00:42.047Z"
   }
 ]
