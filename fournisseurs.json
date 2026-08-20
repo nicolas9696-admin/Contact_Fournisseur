@@ -198,5 +198,27 @@
     "id": "loc-kbpqklyumsswb9ry",
     "created_at": "2026-08-14T12:00:42.047Z",
     "updated_at": "2026-08-14T12:00:42.047Z"
+  },
+  {
+    "entreprise": "Hôtel-Restaurant Bellevue Le Rocheray",
+    "contact_nom": "M. Leuenberger",
+    "fonction": "Patron",
+    "telephone": "+41 79 691 95 10",
+    "email": "info@rocheray.ch",
+    "site_web": "www.rocheray.ch",
+    "adresse": "Le Rocheray 23",
+    "ville": "1347 Le Sentier (VD, CH)",
+    "categorie": "Hôtellerie / Restauration",
+    "mots_cles": [
+      "hôtel",
+      "restaurant",
+      "vallée de joux",
+      "le sentier",
+      "suisse"
+    ],
+    "notes": "Tél. et prénom du patron non précisés ; e-mail général de l'établissement.",
+    "id": "loc-5pcs01iumt1hpnkl",
+    "created_at": "2026-08-20T12:21:54.453Z",
+    "updated_at": "2026-08-20T12:21:54.453Z"
   }
 ]
