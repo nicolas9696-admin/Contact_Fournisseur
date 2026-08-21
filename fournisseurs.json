@@ -261,11 +261,18 @@
       "événementiel",
       "manifestations",
       "atelier mécanique",
-      "suisse"
+      "suisse",
+      "TAB",
+      "Provisoire",
+      "Location"
     ],
     "notes": "Location de matériel électrique pour événements et manifestations : planification, livraison et installation sur site. Propose aussi un atelier mécanique. Points de location + catalogue sur le site.",
     "id": "loc-leguljrmmt2vt2v2",
     "created_at": "2026-08-21T11:44:15.038Z",
-    "updated_at": "2026-08-21T11:44:15.038Z"
+    "updated_at": "2026-08-21T11:44:51.108Z",
+    "contact_nom": null,
+    "fonction": null,
+    "adresse": null,
+    "date_rencontre": null
   }
 ]
