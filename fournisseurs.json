@@ -274,5 +274,27 @@
     "fonction": null,
     "adresse": null,
     "date_rencontre": null
+  },
+  {
+    "entreprise": "Zaptec suisse SA",
+    "contact_nom": "Pascal Dubosson",
+    "fonction": "Conseiller technico-comercial",
+    "telephone": "+41 76 500 36 76",
+    "email": "pascal.dubosson@zaptec.com",
+    "site_web": null,
+    "adresse": null,
+    "ville": null,
+    "categorie": null,
+    "mots_cles": [
+      "Borne",
+      "Zaptec",
+      "Recharge",
+      "bâtiment"
+    ],
+    "notes": null,
+    "date_rencontre": null,
+    "id": "loc-jkdr8i5tmuo3ngxd",
+    "created_at": "2026-09-30T12:46:42.289Z",
+    "updated_at": "2026-09-30T12:46:42.289Z"
   }
 ]
