@@ -318,5 +318,16 @@
     "id": "loc-yqja9ysomuuxpb8x",
     "created_at": "2026-10-05T07:34:33.777Z",
     "updated_at": "2026-10-05T07:34:33.777Z"
+  },
+  {
+    "entreprise": "R&M (Reichle & De-Massari)",
+    "contact_nom": "Moenne-Loccoz",
+    "email": "jimmy.moenne-loccoz@rdm.com",
+    "telephone": "+41 79 388 30 07",
+    "notes": "Externe – Visite R&M (juillet 2026)",
+    "mots_cles": [],
+    "id": "loc-2thsxe7pmvezg3ws",
+    "created_at": "2026-10-19T08:18:47.116Z",
+    "updated_at": "2026-10-19T08:18:47.117Z"
   }
 ]
