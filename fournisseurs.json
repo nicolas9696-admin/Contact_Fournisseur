@@ -329,5 +329,26 @@
     "id": "loc-2thsxe7pmvezg3ws",
     "created_at": "2026-10-19T08:18:47.116Z",
     "updated_at": "2026-10-19T08:18:47.117Z"
+  },
+  {
+    "id": "cf-hager-maquelin",
+    "entreprise": "Hager AG",
+    "contact_nom": "Denis Maquelin",
+    "fonction": "Sales Engineer - Diffuse / Conseiller de vente",
+    "telephone": "+41 79 607 63 60",
+    "email": "denis.maquelin@hager.com",
+    "site_web": "www.hager.ch",
+    "adresse": "Chemin du Petit-Flon 31",
+    "ville": "1052 Le Mont-sur-Lausanne (VD, CH)",
+    "categorie": "Électrotechnique",
+    "mots_cles": [
+      "modulaire",
+      "distribution",
+      "tableaux",
+      "suisse romande"
+    ],
+    "notes": "Tél. fixe : +41 21 644 37 00",
+    "created_at": "2026-10-26T14:54:00.000Z",
+    "updated_at": "2026-10-26T14:54:00.000Z"
   }
 ]
