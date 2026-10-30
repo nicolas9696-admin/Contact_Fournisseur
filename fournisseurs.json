@@ -350,5 +350,27 @@
     "notes": "Tél. fixe : +41 21 644 37 00",
     "created_at": "2026-10-26T14:54:00.000Z",
     "updated_at": "2026-10-26T14:54:00.000Z"
+  },
+  {
+    "id": "cf-chenit-gertsch",
+    "entreprise": "Commune du Chenit",
+    "contact_nom": "M. Gertsch",
+    "fonction": "Responsable des bâtiments",
+    "telephone": "+41 79 267 21 35",
+    "email": null,
+    "site_web": null,
+    "adresse": null,
+    "ville": "Le Chenit (VD, CH)",
+    "categorie": "Collectivité publique",
+    "mots_cles": [
+      "commune",
+      "bâtiments",
+      "vallée de joux",
+      "suisse"
+    ],
+    "notes": null,
+    "date_rencontre": null,
+    "created_at": "2026-10-30T07:41:00.000Z",
+    "updated_at": "2026-10-30T07:41:00.000Z"
   }
 ]
