@@ -394,5 +394,27 @@
     "date_rencontre": null,
     "created_at": "2026-11-02T13:30:00.000Z",
     "updated_at": "2026-11-02T13:30:00.000Z"
+  },
+  {
+    "id": "cf-legrand-mury",
+    "entreprise": "Legrand (Data Center Solutions)",
+    "contact_nom": "David Mury",
+    "fonction": "Spécialiste interphone - visiophone",
+    "telephone": "+41 79 788 79 82",
+    "email": null,
+    "site_web": null,
+    "adresse": null,
+    "ville": "Suisse (romande)",
+    "categorie": "Électrotechnique",
+    "mots_cles": [
+      "interphone",
+      "visiophone",
+      "contrôle d'accès",
+      "suisse romande"
+    ],
+    "notes": null,
+    "date_rencontre": null,
+    "created_at": "2026-11-06T10:40:00.000Z",
+    "updated_at": "2026-11-06T10:40:00.000Z"
   }
 ]
